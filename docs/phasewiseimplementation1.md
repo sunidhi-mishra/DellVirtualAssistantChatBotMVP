@@ -144,11 +144,33 @@ gantt
 
 ---
 
+### 📩 Phase 7: Profile Editing, Mock Email Sender, & Session Termination
+**Goal**: Integrate advanced agent actions, custom notification toasts, and session termination controls.
+
+* **7.1 Customer Profile Editing**:
+  * Edit button toggles cells to inline input fields. Saving writes changes to database and logs field-level modifications to the timeline.
+* **7.2 Close Closed Case Tab**:
+  * Add a dismiss button ("x") to the ended tab, allowing agents to hide closed tabs. Switching defaults to the primary active tab.
+* **7.3 Slide-in SLA Miss Notification & Auto-Removal**:
+  * Upon SLA expiration, trigger a slide-in alert toast that stays on screen for 10 seconds.
+  * Show a `Missed: ⚠️ 1 missed` indicator in the header KPIs.
+  * Automatically hide and remove the missed tab from the sidebar DOM after the 10 seconds timeout.
+* **7.4 End Chat button & Confirmation Modal**:
+  * Add an `End Chat` button to the agent chat input toolbar.
+  * Clicking it opens an SLDS confirmation modal.
+  * Confirming locks chat inputs, stops AHT, and appends a `Chat session ended by Agent Arjun.` log entry to the timeline and chat transcript.
+
+---
+
 ## 📈 Verification Checklist
 
 ### Local Manual Walkthrough
 1. **Load Page**: Verify AHT timer ticks up, and System Details is shown.
 2. **Toggle Modes**: Click "Case Management" sub-tab to ensure the CRM layout updates to Case logs. Click back to "System Details".
 3. **Accept Flow**: Click the flashing `⚠️ Incoming` tab within 30 seconds. Verify the countdown clears, the active tag changes to `4ABC123`, and the CRM card updates details.
-4. **Timeout Flow**: Refresh page, let the 30-second timer run down. Verify the tab closes, and clicking on Case Management logs shows the red `[SYSTEM ALERT]` SLA penalty message.
-5. **Asset Age Audit**: Confirm all ages displayed display values between 1.0 and 3.9 years (e.g., `3 Years, 2 Months`, `1 Year, 8 Months`).
+4. **Timeout Flow**: Refresh page, let the 30-second timer run down. Verify that a red toast notification slides in from the top-right, and the header KPI shows `Missed: ⚠️ 1 missed`. Wait 10 seconds and check that the toast disappears and the missed tab is automatically removed.
+5. **Profile Editing**: Click "Edit" under Customer Profile, change the Name, and click "Save". Verify details update, and Case Timeline registers the edit logs.
+6. **Send Email**: In Case Management, type subject and body in the Send Email card, and click Send. Confirm inputs clear and the timeline logs the event.
+7. **End Chat**: In an active chat session, click "End Chat" in the chat toolbar. Click "End Chat" in the confirmation modal. Verify inputs are disabled (greyed out) and the chat ended message is logged.
+8. **Dismiss Tab**: Click the "x" on the closed case tab. Verify the tab disappears and the active tab is selected.
+

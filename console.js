@@ -199,6 +199,7 @@ const ui = {
   chatHistoryLog: document.getElementById('chat-history-log'),
   agentChatTextarea: document.getElementById('agent-chat-textarea'),
   agentSendBtn: document.getElementById('agent-send-btn'),
+  endChatBtn: document.getElementById('end-chat-btn'),
 
   // Clocks
   ahtClock: document.getElementById('aht-clock'),
@@ -207,7 +208,10 @@ const ui = {
   // SLA Overlays
   incomingAcceptOverlay: document.getElementById('incoming-accept-overlay'),
   overlayTimer: document.getElementById('overlay-timer'),
-  acceptChatActionBtn: document.getElementById('accept-chat-action-btn')
+  acceptChatActionBtn: document.getElementById('accept-chat-action-btn'),
+  endChatModal: document.getElementById('end-chat-modal'),
+  confirmEndChatBtn: document.getElementById('confirm-end-chat-btn'),
+  cancelEndChatBtn: document.getElementById('cancel-end-chat-btn')
 };
 
 
@@ -262,6 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Bind End Chat buttons
+  ui.endChatBtn.addEventListener('click', () => ui.endChatModal.classList.add('show'));
+  ui.cancelEndChatBtn.addEventListener('click', () => ui.endChatModal.classList.remove('show'));
+  ui.confirmEndChatBtn.addEventListener('click', confirmEndChat);
 
   // Initial database render (Active tag details load)
   loadSessionData(state.activeSessionId);
@@ -367,19 +376,19 @@ function loadSessionData(sessionId) {
   if (data.status === 'active') {
     ui.agentChatTextarea.disabled = false;
     ui.agentSendBtn.disabled = false;
+    ui.endChatBtn.disabled = false;
     ui.agentChatTextarea.placeholder = "Type a message to customer... (Press Enter to send)";
-  } else if (data.status === 'ended') {
+  } else {
     ui.agentChatTextarea.disabled = true;
     ui.agentSendBtn.disabled = true;
-    ui.agentChatTextarea.placeholder = "This session has ended. Chat transcript is locked.";
-  } else if (data.status === 'incoming') {
-    ui.agentChatTextarea.disabled = true;
-    ui.agentSendBtn.disabled = true;
-    ui.agentChatTextarea.placeholder = "Accept this chat session to communicate.";
-  } else if (data.status === 'missed') {
-    ui.agentChatTextarea.disabled = true;
-    ui.agentSendBtn.disabled = true;
-    ui.agentChatTextarea.placeholder = "This session was missed. Closed by SLA timeout.";
+    ui.endChatBtn.disabled = true;
+    if (data.status === 'ended') {
+      ui.agentChatTextarea.placeholder = "This session has ended. Chat transcript is locked.";
+    } else if (data.status === 'incoming') {
+      ui.agentChatTextarea.placeholder = "Accept this chat session to communicate.";
+    } else if (data.status === 'missed') {
+      ui.agentChatTextarea.placeholder = "This session was missed. Closed by SLA timeout.";
+    }
   }
 
   updateAhtDisplay();
@@ -432,24 +441,29 @@ function renderChatLog(chatArray) {
       selfServiceComplete = true;
       const divider = document.createElement('div');
       divider.className = 'bot-transcript-divider';
-      divider.innerHTML = `<span class="divider-text">Customer self-service transfer</span>`;
+      divider.innerHTML = `<span class="divider-text">Transferring to Live Support</span>`;
       ui.chatHistoryLog.appendChild(divider);
     }
 
     const msgElement = document.createElement('div');
-    msgElement.className = `console-message ${msg.sender === 'agent' ? 'agent' : 'customer'}`;
+    if (msg.sender === 'system') {
+      msgElement.className = 'console-message system-log';
+      msgElement.innerHTML = `<div class="system-log-bubble">${msg.text}</div>`;
+    } else {
+      msgElement.className = `console-message ${msg.sender === 'agent' ? 'agent' : 'customer'}`;
 
-    // Label bot or customer correctly
-    let senderLabel = "Customer";
-    if (msg.sender === 'bot') senderLabel = "Dell Virtual Assistant";
-    if (msg.sender === 'agent') senderLabel = "Arjun (You)";
+      // Label bot or customer correctly
+      let senderLabel = "Customer";
+      if (msg.sender === 'bot') senderLabel = "Dell Virtual Assistant";
+      if (msg.sender === 'agent') senderLabel = "Arjun (You)";
 
-    msgElement.innerHTML = `
-      <span class="message-meta">${senderLabel}</span>
-      <div class="message-content-bubble">
-        ${msg.text}
-      </div>
-    `;
+      msgElement.innerHTML = `
+        <span class="message-meta">${senderLabel}</span>
+        <div class="message-content-bubble">
+          ${msg.text}
+        </div>
+      `;
+    }
     ui.chatHistoryLog.appendChild(msgElement);
   });
 
@@ -808,5 +822,44 @@ function sendMockEmail() {
   // Re-render timeline log view
   renderTimeline(data.case.timeline);
 }
+
+function confirmEndChat() {
+  const sessionId = state.activeSessionId;
+  const data = sessionDatabase[sessionId];
+  if (!data) return;
+
+  // 1. Hide confirmation modal
+  ui.endChatModal.classList.remove('show');
+
+  // 2. Set status to ended, stop AHT
+  data.status = 'ended';
+  data.ahtRunning = false;
+
+  // 3. Generate current timestamp (formatted HH:MM AM/PM)
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+
+  // 4. Log in case history timeline
+  data.case.timeline.push({
+    time: timeFormatted,
+    type: 'system-ok',
+    text: `Chat session ended by Agent Arjun.`
+  });
+
+  // 5. Append message to chat transcript
+  data.chatTranscript.push({
+    sender: 'system',
+    text: `Chat session ended by Agent Arjun.`
+  });
+
+  // 6. Reload session data (which locks text area, disables button, and sets ended states)
+  loadSessionData(sessionId);
+}
+
 
 

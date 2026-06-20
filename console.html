@@ -111,9 +111,14 @@
       
       <!-- Agent Response Input Console Area -->
       <div class="agent-input-container">
-        <div class="input-actions-bar">
-          <button type="button" class="action-btn" title="Attach Document"><i class="fas fa-paperclip"></i></button>
-          <button type="button" class="action-btn" title="Insert Emoji"><i class="far fa-smile"></i></button>
+        <div class="input-actions-bar" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; gap: 12px;">
+            <button type="button" class="action-btn" title="Attach Document"><i class="fas fa-paperclip"></i></button>
+            <button type="button" class="action-btn" title="Insert Emoji"><i class="far fa-smile"></i></button>
+          </div>
+          <button type="button" class="action-btn end-chat-action-btn" id="end-chat-btn" title="End Chat" disabled>
+            <i class="fas fa-times-circle"></i> End Chat
+          </button>
         </div>
         <div class="input-form-row">
           <textarea class="agent-textarea" id="agent-chat-textarea" placeholder="Type a message to customer... (Press Enter to send)" disabled></textarea>
@@ -354,8 +359,24 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
+  <!-- End Chat Confirmation Modal -->
+  <div class="accept-overlay" id="end-chat-modal">
+    <div class="accept-card" style="border-top-color: var(--sf-color-alert-red);">
+      <div class="accept-icon-wrapper" style="background-color: var(--sf-color-alert-red-bg); color: var(--sf-color-alert-red);">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2 class="accept-title">End Chat Session?</h2>
+      <p class="accept-desc">Are you sure you want to end this active chat session? This action cannot be undone.</p>
+      <div style="display: flex; gap: 12px; width: 100%; margin-top: 16px;">
+        <button type="button" class="accept-btn" id="confirm-end-chat-btn" style="background-color: var(--sf-color-alert-red); flex: 1; box-shadow: 0 2px 4px rgba(186, 5, 23, 0.2);">End Chat</button>
+        <button type="button" class="notes-submit-btn" id="cancel-end-chat-btn" style="flex: 1; justify-content: center; height: auto; align-self: stretch; padding: 0;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- Custom scripts -->
-  <script src="console.js?v=9"></script>
+  <script src="console.js?v=10"></script>
 </body>
 </html>
