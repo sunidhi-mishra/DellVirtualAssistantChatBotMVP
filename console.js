@@ -381,7 +381,7 @@ function loadSessionData(sessionId) {
     ui.agentSendBtn.disabled = true;
     ui.agentChatTextarea.placeholder = "This session was missed. Closed by SLA timeout.";
   }
-  
+
   updateAhtDisplay();
 }
 
@@ -441,7 +441,7 @@ function renderChatLog(chatArray) {
 
     // Label bot or customer correctly
     let senderLabel = "Customer";
-    if (msg.sender === 'bot') senderLabel = "Dell Routing Bot";
+    if (msg.sender === 'bot') senderLabel = "Dell Virtual Assistant";
     if (msg.sender === 'agent') senderLabel = "Arjun (You)";
 
     msgElement.innerHTML = `
@@ -543,6 +543,59 @@ function handleSlaTimeout() {
   // If agent currently loaded this missed tab, refresh panels
   if (state.activeSessionId === '4ABC123') {
     loadSessionData('4ABC123');
+  }
+
+  // 1. Show slide-in alert notification
+  const toastContainer = document.getElementById('toast-container');
+  if (toastContainer) {
+    const toast = document.createElement('div');
+    toast.className = 'slds-toast';
+    toast.innerHTML = `
+      <div class="toast-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="toast-content">
+        <div class="toast-title">Incoming Chat Request Missed</div>
+        <div class="toast-message">Service Tag 4ABC123 missed routing SLA window.</div>
+      </div>
+      <button class="toast-close" aria-label="Close">&times;</button>
+    `;
+    toastContainer.appendChild(toast);
+
+    // Trigger transition
+    setTimeout(() => toast.classList.add('show'), 50);
+
+    // 2. Show missed indicator in header KPIs
+    const missedKpiDivider = document.getElementById('missed-kpi-divider');
+    const missedKpiStat = document.getElementById('missed-kpi-stat');
+    if (missedKpiDivider && missedKpiStat) {
+      missedKpiDivider.style.display = 'block';
+      missedKpiStat.style.display = 'flex';
+    }
+
+    // Function to dismiss toast and automatically remove the tab
+    const removeMissedTab = () => {
+      if (toast.classList.contains('show')) {
+        toast.classList.remove('show');
+
+        // Remove missed tab automatically
+        ui.tabIncoming.style.display = 'none';
+
+        // Redirect selection if current session was the missed one
+        if (state.activeSessionId === '4ABC123') {
+          selectSession('9XYZ789');
+        }
+
+        setTimeout(() => toast.remove(), 300);
+      }
+    };
+
+    // Auto-dismiss and remove after 10 seconds
+    const dismissTimeout = setTimeout(removeMissedTab, 10000);
+
+    // Manual close button click dismisses notification and removes tab
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      clearTimeout(dismissTimeout);
+      removeMissedTab();
+    });
   }
 }
 

@@ -51,6 +51,11 @@
           <span class="kpi-label">Queue Count:</span>
           <span class="kpi-value text-alert" id="queue-volume">📥 2 waiting</span>
         </div>
+        <div class="kpi-divider" id="missed-kpi-divider" style="display: none;"></div>
+        <div class="kpi-stat" id="missed-kpi-stat" style="display: none;">
+          <span class="kpi-label">Missed:</span>
+          <span class="kpi-value" id="missed-count" style="color: #ff3b30; font-weight: 600;">⚠️ 1 missed</span>
+        </div>
       </div>
     </div>
     
@@ -346,7 +351,11 @@
     </div>
   </div>
 
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+
   <!-- Custom scripts -->
-  <script src="console.js?v=8"></script>
+  <script src="console.js?v=9"></script>
 </body>
 </html>
