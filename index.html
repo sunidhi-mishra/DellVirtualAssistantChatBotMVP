@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dell Technical Support — Contact Us</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons for modern corporate portal styling -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="Dell_Logo.svg.png">
+</head>
+<body>
+
+  <!-- Dell Portal Header -->
+  <header class="dell-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <!-- Dell Logo Image -->
+        <img src="Dell_Logo.svg.png" alt="Dell Logo" class="dell-logo-img" height="36">
+        <span class="brand-text">DELL</span>
+        <span class="portal-divider">|</span>
+        <span class="portal-title">Support</span>
+      </div>
+      <nav class="header-nav">
+        <a href="#" class="nav-link">Products</a>
+        <a href="#" class="nav-link">Services</a>
+        <a href="#" class="nav-link">Support</a>
+        <a href="#" class="nav-link">Community</a>
+      </nav>
+      <div class="header-user">
+        <button class="user-btn" aria-label="User Account">
+          <i class="far fa-user"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs navigation -->
+  <div class="breadcrumbs-container">
+    <div class="breadcrumbs">
+      <a href="#">Home</a> <i class="fas fa-chevron-right"></i>
+      <a href="#">Support</a> <i class="fas fa-chevron-right"></i>
+      <span class="current-page">Contact Us</span>
+    </div>
+  </div>
+
+  <!-- Main Grid Layout -->
+  <main class="main-portal-layout">
+    <div class="content-container">
+      
+      <!-- Primary Contact Options Panel -->
+      <section class="support-contact-section">
+        <h1 class="support-main-heading">Dell Technical Support — Contact Us</h1>
+        <p class="support-sub-heading">Get quick answers, troubleshoot technical issues, or request live expert assistance for your Dell product.</p>
+
+        <!-- Vertical Options Card Container -->
+        <div class="contact-options-grid">
+          
+          <!-- Virtual Chat Card (Primary Action) -->
+          <button type="button" class="contact-card interactive" id="virtual-chat-btn" aria-haspopup="dialog" aria-expanded="false">
+            <div class="card-icon-wrapper chat-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <div class="card-details">
+              <h2 class="card-title">Virtual Chat Session</h2>
+              <p class="card-desc">Troubleshoot your issue with our automated assistant, check product specs, or request standard support routing.</p>
+              <span class="card-action-hint">Start Chat <i class="fas fa-arrow-right"></i></span>
+            </div>
+            <div class="badge-recommended">Recommended</div>
+          </button>
+
+          <!-- WhatsApp Connect Card -->
+          <div class="contact-card static-text">
+            <div class="card-icon-wrapper whatsapp-icon">
+              <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="card-details">
+              <h2 class="card-title">Connect via WhatsApp</h2>
+              <p class="card-desc">Send support questions directly to our global helpdesk team via WhatsApp on mobile or desktop web.</p>
+              <span class="card-action-hint phone-number">+91 88803 55088</span>
+            </div>
+          </div>
+
+          <!-- Call Support Card (Static) -->
+          <div class="contact-card static-text">
+            <div class="card-icon-wrapper phone-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="card-details">
+              <h2 class="card-title">Call Technical Support</h2>
+              <p class="card-desc">Speak directly with a support technician. Available 24/7 for premium warranty holders.</p>
+              <span class="card-action-hint phone-number">1800-425-4026</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      
+    </div>
+
+    <!-- Floating Chatbot Panel (Right Panel - Hidden by default) -->
+    <aside class="chat-assistant-panel" id="chatPanel" aria-hidden="true" role="dialog" aria-label="Dell Virtual Assistant">
+      
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="agent-info">
+          <div class="avatar-wrapper">
+            <i class="fas fa-headset"></i>
+            <span class="status-indicator online"></span>
+          </div>
+          <div class="agent-details">
+            <h3 class="agent-name">Dell Virtual Assistant</h3>
+            <span class="agent-status">Online</span>
+          </div>
+        </div>
+        <button class="close-chat-btn" id="close-chat-btn" aria-label="Close Chat Window">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Chat Message Log -->
+      <div class="chat-log" id="chatLog">
+        <!-- Message bubbles will be dynamically appended here via app.js -->
+      </div>
+
+      <!-- Chat Input Area (Controlled dynamically via state) -->
+      <div class="chat-input-container" id="chatInputContainer">
+        <!-- Inside this container, inputs will be rendered/updated in JS -->
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="dell-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 Dell Inc. or its subsidiaries. All Rights Reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy Statement</a>
+        <a href="#">Terms of Sale</a>
+        <a href="#">Legal & Regulatory</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js?v=2"></script>
+</body>
+</html>

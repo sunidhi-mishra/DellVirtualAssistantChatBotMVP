@@ -1,0 +1,64 @@
+Objective: Build a single-page interactive prototype of a Dell Technical Support portal featuring a floating virtual chat assistant with step-by-step user interactions.
+
+1. View Layout & Components
+Main Container: A standard desktop web page representing the Dell Support Website. Use a clean, modern corporate tech theme (white, light gray, and Dell blue accents).
+
+Left/Center Panel (Main Content):
+
+Header: "Dell Technical Support — Contact Us".
+
+A card container hosting 3 vertical option blocks:
+
+Virtual Chat Session (Include a chat icon. This is the primary interactive element).
+
+Connect via WhatsApp (Static/non-functional link with a WhatsApp icon).
+
+Call Technical Support (Static/non-functional text showing a placeholder phone number).
+
+Right Panel (Hidden by Default): A slide-in or floating Chat Window that activates only when "Virtual Chat Session" is clicked.
+
+2. Interactive Behavior & State Machine
+State 1: Initial Page Load
+The main support page is visible.
+
+The right-side Chat Window is hidden.
+
+Trigger: User clicks on the Virtual Chat Session option.
+
+State 2: Chat Window Activation (Greeting)
+The Chat Window slides open on the right side of the screen.
+
+Bot Message 1 renders automatically:
+
+"Hello! Thank you for contacting Dell Technical Support. I am your Dell Virtual Assistant. To get started, please enter your Service Tag or Express Service Code."
+Below the message, display a text input field with a placeholder "e.g., 4ABC123"
+Trigger: User types any value into the input field and press enter or send message icon.
+
+State 3: Service Tag Captured & Menu Options
+The text input field and submit button disappear or become disabled to freeze the answer.
+
+Bot Message 2 renders immediately after:
+
+"To help me guide you to the right solution, please select an option from the menu below:"
+
+Directly underneath this second message, render 5 clickable pill buttons organized in a neat vertical or wrapped grid:
+
+💻 Hardware & Performance Issues
+
+💿 Software, OS, & Drivers
+
+📋 Check Warranty Status
+
+📦 Order & Dispatch Status
+
+🧑‍💻 Connect to Live Agent
+
+Clicking any pill displays a static confirmation message (e.g., clicking "Connect to Live Agent" displays "Transferring you to a human agent... Please hold.").
+
+3. Visual & UX Guidelines for Antigravity
+Color Palette: Dominant white backgrounds, slate gray text, and Dell Blue (#0076CE or similar) for primary buttons, links, and headers.
+
+Chat Styling: Differentiate bot messages with a light gray background bubble aligned to the left. The user's submitted service tag should appear as a blue bubble aligned to the right.
+
+Pill Buttons: Rounded corners, distinct borders, and a subtle hover effect to make it obvious they are clickable shortcuts.
+

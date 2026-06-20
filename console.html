@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salesforce Service Console — Dell support (OOW)</title>
+  
+  <!-- Fonts: Inter & Roboto Monospace for statistics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="console.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="Dell_Logo.svg.png">
+</head>
+<body>
+
+  <!-- Salesforce Utility Global Header -->
+  <header class="console-header">
+    <div class="header-left">
+      <!-- Salesforce launcher grid icon -->
+      <div class="slds-launcher" aria-label="App Launcher">
+        <i class="fas fa-th"></i>
+      </div>
+      <div class="slds-logo-area">
+        <img src="Dell_Logo.svg.png" alt="Dell Logo" class="brand-logo-img">
+        <span class="app-name">Service Console</span>
+      </div>
+      <nav class="console-nav">
+        <div class="nav-item active">Cases</div>
+        <div class="nav-item">Accounts</div>
+        <div class="nav-item">Assets</div>
+      </nav>
+    </div>
+    
+    <!-- Live KPIs and statistics -->
+    <div class="header-center">
+      <div class="kpi-panel">
+        <div class="kpi-stat">
+          <span class="kpi-label">AHT:</span>
+          <span class="kpi-value timer-clock" id="aht-clock">00:00</span>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="kpi-stat">
+          <span class="kpi-label">Queue Count:</span>
+          <span class="kpi-value text-alert" id="queue-volume">📥 2 waiting</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search Salesforce..." class="search-input">
+      </div>
+      <div class="user-profile">
+        <div class="avatar-bg">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <span class="user-name">Arjun (Dell Support)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Split Screen Workspace Container -->
+  <main class="console-workspace">
+    
+    <!-- LEFT PANEL: Unified Chat Console (1/3 Width) -->
+    <section class="chat-console-sidebar" aria-label="Chat Interaction Console">
+      
+      <!-- Session Navigation Tabs -->
+      <div class="session-tabs-bar" role="tablist" aria-label="Customer Sessions">
+        
+        <!-- Active Session Tab -->
+        <button type="button" class="session-tab active" id="tab-session-active" role="tab" aria-selected="true" aria-controls="chat-content-active">
+          <span class="status-dot active"></span>
+          <span class="tab-label" id="tab-label-active">Tag: 9XYZ789</span>
+        </button>
+        
+        <!-- Flashing Incoming SLA Tab -->
+        <button type="button" class="session-tab incoming-alert-flashing" id="tab-session-incoming" role="tab" aria-selected="false" aria-controls="chat-content-incoming">
+          <span class="status-dot warning"></span>
+          <span class="tab-label" id="tab-label-incoming">New: 4ABC123 <span class="countdown-timer" id="incoming-sla-countdown">(30s)</span></span>
+        </button>
+        
+        <!-- Ended/Closed Session Tab -->
+        <button type="button" class="session-tab ended" id="tab-session-ended" role="tab" aria-selected="false" aria-controls="chat-content-ended">
+          <span class="status-dot muted"></span>
+          <span class="tab-label">Closed: 2LMN456</span>
+        </button>
+        
+      </div>
+      
+      <!-- Chat Conversation Log Display -->
+      <div class="chat-history-log" id="chat-history-log">
+        <!-- Dynanically populated chat log based on selection -->
+      </div>
+      
+      <!-- Agent Response Input Console Area -->
+      <div class="agent-input-container">
+        <div class="input-actions-bar">
+          <button type="button" class="action-btn" title="Attach Document"><i class="fas fa-paperclip"></i></button>
+          <button type="button" class="action-btn" title="Insert Emoji"><i class="far fa-smile"></i></button>
+        </div>
+        <div class="input-form-row">
+          <textarea class="agent-textarea" id="agent-chat-textarea" placeholder="Type a message to customer... (Press Enter to send)" disabled></textarea>
+          <button type="button" class="agent-send-btn" id="agent-send-btn" aria-label="Send Message" disabled>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+      
+    </section>
+
+    <!-- RIGHT PANEL: Dual-Mode CRM Workspace (2/3 Width) -->
+    <section class="crm-workspace-main" aria-label="CRM Workspace Details">
+      
+      <!-- Workspace Sub-Tabs (System Details vs Case Logs) -->
+      <div class="workspace-tabs-header">
+        <button type="button" class="workspace-tab-btn active" id="subtab-system-details" aria-selected="true">
+          <i class="fas fa-desktop icon-spacer"></i> System Details
+        </button>
+        <button type="button" class="workspace-tab-btn" id="subtab-case-management" aria-selected="false">
+          <i class="fas fa-folder-open icon-spacer"></i> Case Management &amp; Logs
+        </button>
+      </div>
+
+      <!-- Scrollable Panels Container -->
+      <div class="workspace-panels-body">
+        
+        <!-- Panel 1: Mode Tab A - System Details (Visible by default) -->
+        <div class="workspace-panel-view active" id="panel-system-details">
+          
+          <!-- Grid of Details Cards -->
+          <div class="details-cards-grid">
+            
+            <!-- Card 1: Customer Profile -->
+            <div class="slds-card">
+              <div class="slds-card-header" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <i class="fas fa-user-circle header-icon customer-blue"></i>
+                  <h3 class="card-title">Customer Profile</h3>
+                </div>
+                <button type="button" class="slds-card-header-action-btn" id="edit-profile-btn" aria-label="Edit Profile">
+                  <i class="fas fa-pencil-alt"></i> Edit
+                </button>
+              </div>
+              <div class="slds-card-body">
+                <table class="crm-table">
+                  <tr>
+                    <td class="cell-label">Customer Name</td>
+                    <td class="cell-value" id="crm-cust-name">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Mobile Phone</td>
+                    <td class="cell-value" id="crm-cust-mobile">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Alternate Phone</td>
+                    <td class="cell-value" id="crm-cust-altphone">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Email Address</td>
+                    <td class="cell-value" id="crm-cust-email">-</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card 2: System Specifications -->
+            <div class="slds-card">
+              <div class="slds-card-header">
+                <i class="fas fa-laptop header-icon hardware-gray"></i>
+                <h3 class="card-title">System &amp; Hardware Details</h3>
+              </div>
+              <div class="slds-card-body">
+                <table class="crm-table">
+                  <tr>
+                    <td class="cell-label">System Model</td>
+                    <td class="cell-value" id="crm-sys-model">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">CPU Type</td>
+                    <td class="cell-value" id="crm-sys-cpu">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">RAM Installed</td>
+                    <td class="cell-value" id="crm-sys-ram">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Storage Capacity</td>
+                    <td class="cell-value" id="crm-sys-storage">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Asset Age</td>
+                    <td class="cell-value asset-age-highlight" id="crm-sys-age">-</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card 3: Entitlement & Warranty (Strictly isolated status badge) -->
+            <div class="slds-card warranty-card">
+              <div class="slds-card-header">
+                <i class="fas fa-shield-alt header-icon warranty-orange"></i>
+                <h3 class="card-title">Warranty &amp; Entitlement Status</h3>
+              </div>
+              <div class="slds-card-body">
+                <div class="warranty-status-badge-container">
+                  <span class="oow-badge" id="crm-warranty-badge">
+                    <i class="fas fa-times-circle"></i> OUT OF WARRANTY
+                  </span>
+                </div>
+                <div class="warranty-history-log">
+                  <h4 class="small-header">Contract Logs</h4>
+                  <p class="history-log-text" id="crm-warranty-history">-</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+
+        <!-- Panel 2: Mode Tab B - Case Management & Logs (Hidden by default) -->
+        <div class="workspace-panel-view" id="panel-case-management">
+          
+          <div class="case-management-split">
+            
+            <!-- Case Metadata Summary Card -->
+            <div class="slds-card case-summary-card">
+              <div class="slds-card-header">
+                <i class="fas fa-info-circle header-icon"></i>
+                <h3 class="card-title">Case Metadata</h3>
+              </div>
+              <div class="slds-card-body">
+                <table class="crm-table">
+                  <tr>
+                    <td class="cell-label">Case ID</td>
+                    <td class="cell-value" id="case-id">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Date Created</td>
+                    <td class="cell-value" id="case-created">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Origin Channel</td>
+                    <td class="cell-value" id="case-origin">-</td>
+                  </tr>
+                  <tr>
+                    <td class="cell-label">Current Status</td>
+                    <td class="cell-value"><span class="slds-status-badge open" id="case-status">-</span></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Case Action Notes Adder -->
+            <div class="slds-card notes-adder-card">
+              <div class="slds-card-header">
+                <i class="far fa-edit header-icon"></i>
+                <h3 class="card-title">Add Workspace Notes</h3>
+              </div>
+              <div class="slds-card-body">
+                <div class="notes-input-wrapper">
+                  <textarea class="notes-textarea" id="notes-textarea" placeholder="Type case updates or call notes..."></textarea>
+                  <button type="button" class="notes-submit-btn" id="notes-submit-btn">
+                    <i class="fas fa-plus"></i> Add Note to Timeline
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Send Email Card -->
+            <div class="slds-card email-sender-card">
+              <div class="slds-card-header">
+                <i class="far fa-envelope header-icon"></i>
+                <h3 class="card-title">Send Email</h3>
+              </div>
+              <div class="slds-card-body">
+                <div class="email-input-wrapper">
+                  <div class="email-field-row">
+                    <label for="email-to-input" class="email-field-label">To:</label>
+                    <input type="email" id="email-to-input" class="email-text-input" placeholder="recipient@example.com">
+                  </div>
+                  <div class="email-field-row">
+                    <label for="email-subject-input" class="email-field-label">Subject:</label>
+                    <input type="text" id="email-subject-input" class="email-text-input" placeholder="Enter subject...">
+                  </div>
+                  <textarea class="email-body-textarea" id="email-body-textarea" placeholder="Type email message body here..."></textarea>
+                  <button type="button" class="email-send-action-btn" id="email-send-btn">
+                    <i class="fas fa-paper-plane"></i> Send Email
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline of Case Logs & Event Auditing -->
+            <div class="slds-card timeline-card">
+              <div class="slds-card-header">
+                <i class="fas fa-history header-icon"></i>
+                <h3 class="card-title">Interactive Case History Timeline</h3>
+              </div>
+              <div class="slds-card-body">
+                <div class="timeline-container" id="timeline-log-list">
+                  <!-- System activities and timeline notes will render here -->
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </section>
+  </main>
+
+  <!-- Dynamic Accept Prompt Overlay (SLA Interaction) -->
+  <div class="accept-overlay" id="incoming-accept-overlay">
+    <div class="accept-card">
+      <div class="accept-icon-wrapper">
+        <i class="fas fa-headset pulse-icon"></i>
+      </div>
+      <h2 class="accept-title">Incoming Support Request</h2>
+      <p class="accept-desc">A customer is requesting live agent routing. You must accept within the SLA time limit.</p>
+      <div class="accept-tag-info">
+        <span class="accept-tag-label">Service Tag:</span>
+        <span class="accept-tag-value">4ABC123</span>
+      </div>
+      <div class="accept-sla-clock">
+        Time Remaining: <span class="sla-timer-text" id="overlay-timer">30s</span>
+      </div>
+      <button type="button" class="accept-btn" id="accept-chat-action-btn">
+        <i class="fas fa-check icon-spacer"></i> Accept Chat Session
+      </button>
+    </div>
+  </div>
+
+  <!-- Custom scripts -->
+  <script src="console.js?v=7"></script>
+</body>
+</html>
