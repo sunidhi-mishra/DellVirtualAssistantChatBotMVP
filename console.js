@@ -251,6 +251,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Bind Send Email button
   ui.emailSendBtn.addEventListener('click', sendMockEmail);
 
+  // Bind Close Ended Tab button
+  const closeEndedTabBtn = document.getElementById('close-ended-tab-btn');
+  if (closeEndedTabBtn) {
+    closeEndedTabBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent tab switching trigger
+      ui.tabEnded.style.display = 'none';
+      if (state.activeSessionId === '2LMN456') {
+        selectSession('9XYZ789');
+      }
+    });
+  }
+
   // Initial database render (Active tag details load)
   loadSessionData(state.activeSessionId);
 });

@@ -716,9 +716,15 @@ body {
 }
 
 .slds-status-badge.open {
-  background-color: var(--sf-color-alert-yellow-bg);
-  color: var(--sf-color-alert-yellow);
+  background-color: var(--sf-color-success-bg);
+  color: var(--sf-color-success);
 }
+
+.slds-status-badge.closed {
+  background-color: var(--sf-color-alert-red-bg);
+  color: var(--sf-color-alert-red);
+}
+
 
 /* Notes Adder Component */
 .notes-input-wrapper {
@@ -1150,5 +1156,26 @@ body {
 .email-send-action-btn:active {
   background-color: #01375e;
 }
+
+/* Close Tab Button */
+.close-tab-icon {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sf-text-muted);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.close-tab-icon:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--sf-text-primary);
+}
+
 
 
