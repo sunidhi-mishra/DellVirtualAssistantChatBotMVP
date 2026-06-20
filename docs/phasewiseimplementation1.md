@@ -158,7 +158,9 @@ gantt
 * **7.4 End Chat button & Confirmation Modal**:
   * Add an `End Chat` button to the agent chat input toolbar.
   * Clicking it opens an SLDS confirmation modal.
-  * Confirming locks chat inputs, stops AHT, and appends a `Chat session ended by Agent Arjun.` log entry to the timeline and chat transcript.
+  * Confirming locks chat inputs, stops AHT, appends a `Chat session ended by Agent Arjun.` log entry to the timeline and chat transcript, greys out the tab (applies `.ended` style and sets status dot to muted), and dynamically adds a close button to allow the agent to dismiss the tab.
+* **7.5 Unified Date-Time Stamps in Case Logs**:
+  * Use a unified date-time format (`YYYY-MM-DD HH:MM AM/PM`) for all case timeline event logs (both initial mock data and newly generated event stamps).
 
 ---
 
@@ -171,6 +173,8 @@ gantt
 4. **Timeout Flow**: Refresh page, let the 30-second timer run down. Verify that a red toast notification slides in from the top-right, and the header KPI shows `Missed: ⚠️ 1 missed`. Wait 10 seconds and check that the toast disappears and the missed tab is automatically removed.
 5. **Profile Editing**: Click "Edit" under Customer Profile, change the Name, and click "Save". Verify details update, and Case Timeline registers the edit logs.
 6. **Send Email**: In Case Management, type subject and body in the Send Email card, and click Send. Confirm inputs clear and the timeline logs the event.
-7. **End Chat**: In an active chat session, click "End Chat" in the chat toolbar. Click "End Chat" in the confirmation modal. Verify inputs are disabled (greyed out) and the chat ended message is logged.
-8. **Dismiss Tab**: Click the "x" on the closed case tab. Verify the tab disappears and the active tab is selected.
+7. **End Chat**: In an active chat session, click "End Chat" in the chat toolbar. Click "End Chat" in the confirmation modal. Verify inputs are disabled (greyed out), the chat ended message is logged, the tab itself is greyed out, and a close button appears.
+8. **Dismiss Tab**: Click the "x" on any closed/ended tab. Verify the tab disappears and focus switches to another visible tab.
+9. **Case Log Timestamps**: Verify all timeline log event timestamps contain the date along with the time (formatted as `YYYY-MM-DD HH:MM AM/PM`).
+
 

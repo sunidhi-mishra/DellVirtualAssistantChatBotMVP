@@ -32,10 +32,10 @@ const sessionDatabase = {
       origin: 'Chat',
       status: 'Open',
       timeline: [
-        { time: '11:20 PM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated via portal.' },
-        { time: '11:22 PM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' },
-        { time: '11:23 PM', type: 'system-ok', text: 'Session routed to agent queue. Assigned to Agent: Arjun.' },
-        { time: '11:23 PM', type: 'note-added', text: 'Chat session accepted. Auto-greeting sent to customer.' }
+        { time: '2026-06-19 11:20 PM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated via portal.' },
+        { time: '2026-06-19 11:22 PM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' },
+        { time: '2026-06-19 11:23 PM', type: 'system-ok', text: 'Session routed to agent queue. Assigned to Agent: Arjun.' },
+        { time: '2026-06-19 11:23 PM', type: 'note-added', text: 'Chat session accepted. Auto-greeting sent to customer.' }
       ]
     },
     chatTranscript: [
@@ -75,8 +75,8 @@ const sessionDatabase = {
       origin: 'Chat',
       status: 'Open',
       timeline: [
-        { time: '01:05 AM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated via SupportAssist.' },
-        { time: '01:07 AM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' }
+        { time: '2026-06-20 01:05 AM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated via SupportAssist.' },
+        { time: '2026-06-20 01:07 AM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' }
       ]
     },
     chatTranscript: [
@@ -113,14 +113,14 @@ const sessionDatabase = {
       id: '5008W00000LMN88',
       created: '2026-06-18 03:10 PM',
       origin: 'Chat',
-      status: 'Closed',
+      status: 'Open',
       timeline: [
-        { time: '03:10 PM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated.' },
-        { time: '03:12 PM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' },
-        { time: '03:13 PM', type: 'system-ok', text: 'Session routed to agent queue. Assigned to Agent: Arjun.' },
-        { time: '03:13 PM', type: 'note-added', text: 'Chat session accepted. Auto-greeting sent to customer.' },
-        { time: '03:22 PM', type: 'note-added', text: 'Guided customer to perform a hard reset. System booted successfully and issue resolved.' },
-        { time: '03:45 PM', type: 'system-ok', text: 'Chat session terminated by customer. Case closed.' }
+        { time: '2026-06-18 03:10 PM', type: 'system-ok', text: 'Incoming chat route initiated. Customer authenticated.' },
+        { time: '2026-06-18 03:12 PM', type: 'system-ok', text: 'Bot self-service completed. Customer requested live-agent handoff.' },
+        { time: '2026-06-18 03:13 PM', type: 'system-ok', text: 'Session routed to agent queue. Assigned to Agent: Arjun.' },
+        { time: '2026-06-18 03:13 PM', type: 'note-added', text: 'Chat session accepted. Auto-greeting sent to customer.' },
+        { time: '2026-06-18 03:22 PM', type: 'note-added', text: 'Guided customer to perform a hard reset. System booted successfully and issue resolved.' },
+        { time: '2026-06-18 03:45 PM', type: 'system-ok', text: 'Chat session terminated by customer. AHT: 12:08' }
       ]
     },
     chatTranscript: [
@@ -262,7 +262,15 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation(); // Prevent tab switching trigger
       ui.tabEnded.style.display = 'none';
       if (state.activeSessionId === '2LMN456') {
-        selectSession('9XYZ789');
+        const allTabs = [
+          { id: '9XYZ789', element: ui.tabActive },
+          { id: '4ABC123', element: ui.tabIncoming },
+          { id: '2LMN456', element: ui.tabEnded }
+        ];
+        const nextTab = allTabs.find(t => t.element.style.display !== 'none' && t.id !== '2LMN456');
+        if (nextTab) {
+          selectSession(nextTab.id);
+        }
       }
     });
   }
@@ -377,7 +385,7 @@ function loadSessionData(sessionId) {
     ui.agentChatTextarea.disabled = false;
     ui.agentSendBtn.disabled = false;
     ui.endChatBtn.disabled = false;
-    ui.agentChatTextarea.placeholder = "Type a message to customer... (Press Enter to send)";
+    ui.agentChatTextarea.placeholder = "Type a message to customer. (Press Enter to send)";
   } else {
     ui.agentChatTextarea.disabled = true;
     ui.agentSendBtn.disabled = true;
@@ -475,6 +483,18 @@ function renderChatLog(chatArray) {
 // TIMERS & CLOCKS (AHT & SLA COUNTDOWNS)
 // ==========================================================================
 
+function formatTimestamp(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  return `${year}-${month}-${day} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+}
+
 function startAhtTimer() {
   state.ahtTimerInterval = setInterval(() => {
     // Increment AHT seconds for all active running sessions
@@ -536,17 +556,10 @@ function handleSlaTimeout() {
   ui.tabIncoming.style.opacity = '0.4';
   ui.labelIncoming.innerHTML = `Missed: 4ABC123 <span class="countdown-timer">(Timed Out)</span>`;
 
-  // Update queue KPI count
-  ui.queueVolume.textContent = `📥 1 chat waiting`;
+  ui.queueVolume.textContent = `📥 0 chats waiting`;
 
   // Append RED system alert entry to incoming session's Case logs
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  const timeFormatted = formatTimestamp(new Date());
 
   sessionDatabase['4ABC123'].case.timeline.push({
     time: timeFormatted,
@@ -642,17 +655,10 @@ function acceptIncomingChat() {
     <span class="tab-label" id="tab-label-incoming">Tag: 4ABC123</span>
   `;
 
-  // 4. Update queue KPIs
-  ui.queueVolume.textContent = `📥 1 chat waiting`;
+  ui.queueVolume.textContent = `📥 0 chats waiting`;
 
   // 5. Prepend note to timeline
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  const timeFormatted = formatTimestamp(new Date());
 
   sessionDatabase['4ABC123'].case.timeline.push({
     time: timeFormatted,
@@ -697,14 +703,7 @@ function submitAgentNote() {
   const noteContent = ui.notesTextarea.value.trim();
   if (!noteContent) return;
 
-  // Generate current timestamp (formatted HH:MM AM/PM)
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  const timeFormatted = formatTimestamp(new Date());
 
   // Save note to Case timeline database for active session
   sessionDatabase[state.activeSessionId].case.timeline.push({
@@ -758,13 +757,7 @@ function toggleEditProfile() {
       oldCust.email = newEmail;
 
       // Generate current timestamp (formatted HH:MM AM/PM)
-      const now = new Date();
-      let hours = now.getHours();
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+      const timeFormatted = formatTimestamp(new Date());
 
       // Append detail change record to Case History Timeline
       const changeText = `Customer details updated: ${changes.join(', ')}.`;
@@ -799,13 +792,7 @@ function sendMockEmail() {
   }
 
   // Generate current timestamp (formatted HH:MM AM/PM)
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  const timeFormatted = formatTimestamp(new Date());
 
   // Log email to Interactive Case History Timeline
   const emailLogText = `Email sent to ${to} by Agent Arjun. Subject: ${subject}. Context: ${body}.`;
@@ -823,6 +810,13 @@ function sendMockEmail() {
   renderTimeline(data.case.timeline);
 }
 
+function getTabElement(sessionId) {
+  if (sessionId === '9XYZ789') return ui.tabActive;
+  if (sessionId === '4ABC123') return ui.tabIncoming;
+  if (sessionId === '2LMN456') return ui.tabEnded;
+  return null;
+}
+
 function confirmEndChat() {
   const sessionId = state.activeSessionId;
   const data = sessionDatabase[sessionId];
@@ -835,30 +829,63 @@ function confirmEndChat() {
   data.status = 'ended';
   data.ahtRunning = false;
 
+  const totalSecs = data.ahtSeconds;
+  const minutes = Math.floor(totalSecs / 60);
+  const seconds = totalSecs % 60;
+  const ahtFormatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
   // 3. Generate current timestamp (formatted HH:MM AM/PM)
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  const timeFormatted = formatTimestamp(new Date());
 
   // 4. Log in case history timeline
   data.case.timeline.push({
     time: timeFormatted,
     type: 'system-ok',
-    text: `Chat session ended by Agent Arjun.`
+    text: `Chat session ended by Agent Arjun. AHT: ${ahtFormatted}`
   });
 
   // 5. Append message to chat transcript
   data.chatTranscript.push({
     sender: 'system',
-    text: `Chat session ended by Agent Arjun.`
+    text: `Chat session ended by Agent Arjun. AHT: ${ahtFormatted}`
   });
 
   // 6. Reload session data (which locks text area, disables button, and sets ended states)
   loadSessionData(sessionId);
+
+  // 7. Grey out the tab and add close functionality
+  const tabElement = getTabElement(sessionId);
+  if (tabElement) {
+    tabElement.classList.add('ended');
+    const statusDot = tabElement.querySelector('.status-dot');
+    if (statusDot) {
+      statusDot.className = 'status-dot muted';
+    }
+
+    if (!tabElement.querySelector('.close-tab-icon')) {
+      const closeBtn = document.createElement('span');
+      closeBtn.className = 'close-tab-icon';
+      closeBtn.title = 'Close Tab';
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tabElement.style.display = 'none';
+
+        if (state.activeSessionId === sessionId) {
+          const allTabs = [
+            { id: '9XYZ789', element: ui.tabActive },
+            { id: '4ABC123', element: ui.tabIncoming },
+            { id: '2LMN456', element: ui.tabEnded }
+          ];
+          const nextTab = allTabs.find(t => t.element.style.display !== 'none' && t.id !== sessionId);
+          if (nextTab) {
+            selectSession(nextTab.id);
+          }
+        }
+      });
+      tabElement.appendChild(closeBtn);
+    }
+  }
 }
 
 
