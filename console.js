@@ -272,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
           selectSession(nextTab.id);
         }
       }
+      checkAllTabsClosed();
     });
   }
 
@@ -310,8 +311,24 @@ function setWorkspaceTab(tabName) {
   }
 }
 
+function checkAllTabsClosed() {
+  const allTabs = [ui.tabActive, ui.tabIncoming, ui.tabEnded];
+  const allClosed = allTabs.every(tab => tab.style.display === 'none');
+  if (allClosed) {
+    document.getElementById('no-chat-placeholder').style.display = 'flex';
+    document.querySelector('.chat-console-sidebar').style.display = 'none';
+    document.querySelector('.crm-workspace-main').style.display = 'none';
+    ui.ahtClock.textContent = "00:00";
+  }
+}
+
 function selectSession(sessionId) {
   state.activeSessionId = sessionId;
+
+  // Restore panel displays and hide placeholder
+  document.getElementById('no-chat-placeholder').style.display = 'none';
+  document.querySelector('.chat-console-sidebar').style.display = 'flex';
+  document.querySelector('.crm-workspace-main').style.display = 'flex';
 
   // Update selected highlight in left tabs
   ui.tabActive.classList.remove('active');
@@ -511,6 +528,13 @@ function startAhtTimer() {
 }
 
 function updateAhtDisplay() {
+  const allTabs = [ui.tabActive, ui.tabIncoming, ui.tabEnded];
+  const allClosed = allTabs.every(tab => tab.style.display === 'none');
+  if (allClosed) {
+    ui.ahtClock.textContent = "00:00";
+    return;
+  }
+
   const currentSession = sessionDatabase[state.activeSessionId];
   if (!currentSession) return;
 
@@ -608,8 +632,17 @@ function handleSlaTimeout() {
 
         // Redirect selection if current session was the missed one
         if (state.activeSessionId === '4ABC123') {
-          selectSession('9XYZ789');
+          const allTabs = [
+            { id: '9XYZ789', element: ui.tabActive },
+            { id: '4ABC123', element: ui.tabIncoming },
+            { id: '2LMN456', element: ui.tabEnded }
+          ];
+          const nextTab = allTabs.find(t => t.element.style.display !== 'none' && t.id !== '4ABC123');
+          if (nextTab) {
+            selectSession(nextTab.id);
+          }
         }
+        checkAllTabsClosed();
 
         setTimeout(() => toast.remove(), 300);
       }
@@ -882,6 +915,7 @@ function confirmEndChat() {
             selectSession(nextTab.id);
           }
         }
+        checkAllTabsClosed();
       });
       tabElement.appendChild(closeBtn);
     }

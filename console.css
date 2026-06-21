@@ -1287,6 +1287,37 @@ body {
   display: inline-block;
 }
 
+/* No Active Chat Placeholder */
+.no-chat-placeholder-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  background-color: var(--sf-canvas-bg);
+  padding: 40px;
+  text-align: center;
+  height: 100%;
+}
+
+.no-chat-image {
+  max-width: 200px;
+  margin-bottom: 24px;
+}
+
+.no-chat-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sf-text-primary);
+  margin-bottom: 8px;
+}
+
+.no-chat-subtext {
+  font-size: 13px;
+  color: var(--sf-text-secondary);
+  max-width: 340px;
+}
+
 
 
 
