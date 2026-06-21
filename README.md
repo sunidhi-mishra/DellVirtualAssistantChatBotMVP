@@ -17,10 +17,8 @@ This repository hosts a dual-mode MVP showing the support experience from both t
 
 You can view and test the live interactive MVP sites hosted on Firebase here:
 
-<div style="display: flex; gap: 12px; margin: 16px 0;">
-  <a href="https://dellchatbotmvp.web.app/" target="_blank" style="display: inline-block; padding: 12px 24px; font-weight: bold; color: #ffffff; background-color: #0076CE; border-radius: 4px; text-decoration: none; box-shadow: 0 2px 4px rgba(0,118,206,0.2);">🚀 Launch Customer Portal</a>
-  <a href="https://dellchatbotmvp-agent.web.app/" target="_blank" style="display: inline-block; padding: 12px 24px; font-weight: bold; color: #ffffff; background-color: #1b2a47; border-radius: 4px; text-decoration: none; box-shadow: 0 2px 4px rgba(27,42,71,0.2);">🎧 Launch Agent Console</a>
-</div>
+[![Launch Customer Portal](https://img.shields.io/badge/Customer%20Portal-Launch%20MVP-0076CE?style=for-the-badge&logo=dell&logoColor=white)](https://dellchatbotmvp.web.app/)
+[![Launch Agent Console](https://img.shields.io/badge/Agent%20Console-Launch%20MVP-1b2a47?style=for-the-badge&logo=salesforce&logoColor=white)](https://dellchatbotmvp-agent.web.app/)
 
 ---
 
