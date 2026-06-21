@@ -51,6 +51,9 @@ function closeChat() {
   elements.chatPanel.classList.remove('is-open');
   elements.chatPanel.setAttribute('aria-hidden', 'true');
   elements.virtualChatBtn.setAttribute('aria-expanded', 'false');
+  
+  // Reset session state so that reopening starts fresh
+  resetSession();
 }
 
 // 5. State Machine Transition Manager
