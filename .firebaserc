@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "dellchatbotmvp"
+  },
+  "targets": {
+    "dellchatbotmvp": {
+      "hosting": {
+        "customer": [
+          "dellchatbotmvp"
+        ],
+        "agent": [
+          "dellchatbotmvp-agent"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

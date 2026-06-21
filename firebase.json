@@ -1,0 +1,36 @@
+{
+  "hosting": [
+    {
+      "target": "customer",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "console.html",
+        "console.css",
+        "console.js",
+        "docs/**",
+        "screenshots/**"
+      ]
+    },
+    {
+      "target": "agent",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "index.html",
+        "style.css",
+        "app.js",
+        "docs/**",
+        "screenshots/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/console.html"
+        }
+      ]
+    }
+  ]
+}
