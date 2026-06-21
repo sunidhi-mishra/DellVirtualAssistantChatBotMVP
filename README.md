@@ -1,7 +1,6 @@
 # Dell Support Virtual Assistant & Service Console MVP
 
-> [!NOTE]  
-> **MVP Status Indicator**: This project is currently a **Minimum Viable Product (MVP) Prototype** designed to demonstrate key user flows, layout grids, and interactive state management. It is **not a final product** and is built on a lightweight vanilla web stack (HTML5/CSS3/JavaScript) for proof-of-concept and user evaluation.
+> 💡 **MVP Status Indicator**: This project is currently a **Minimum Viable Product (MVP) Prototype** designed to demonstrate key user flows, layout grids, and interactive state management. It is **not a final product** and is built on a lightweight vanilla web stack (HTML5/CSS3/JavaScript) for proof-of-concept and user evaluation.
 
 ---
 
@@ -11,6 +10,17 @@ This repository hosts a dual-mode MVP showing the support experience from both t
 
 1. **Customer-Facing Portal & Virtual Assistant**: A modern support portal allowing customers to submit Dell Service Tags, run automated validation checkups, view warranty statuses, track shipping updates, or trigger agent handoffs.
 2. **Agent Salesforce Service Console**: A responsive split-screen dashboard resembling the Salesforce Lightning console interface. It features real-time SLA count-down indicators, active handle time tracking, editable CRM customer details, inline emails, and full chat control.
+
+---
+
+## 🌐 Live Deployments
+
+You can view and test the live interactive MVP sites hosted on Firebase here:
+
+<div style="display: flex; gap: 12px; margin: 16px 0;">
+  <a href="https://dellchatbotmvp.web.app/" target="_blank" style="display: inline-block; padding: 12px 24px; font-weight: bold; color: #ffffff; background-color: #0076CE; border-radius: 4px; text-decoration: none; box-shadow: 0 2px 4px rgba(0,118,206,0.2);">🚀 Launch Customer Portal</a>
+  <a href="https://dellchatbotmvp-agent.web.app/" target="_blank" style="display: inline-block; padding: 12px 24px; font-weight: bold; color: #ffffff; background-color: #1b2a47; border-radius: 4px; text-decoration: none; box-shadow: 0 2px 4px rgba(27,42,71,0.2);">🎧 Launch Agent Console</a>
+</div>
 
 ---
 
