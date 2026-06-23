@@ -12,7 +12,7 @@
           "dellchatbotmvp-agent"
         ],
         "flowchart": [
-          "dellchatbotmvp-flowchart"
+          "userjourneyflowchart"
         ]
       }
     }

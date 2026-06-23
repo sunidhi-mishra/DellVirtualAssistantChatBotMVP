@@ -19,6 +19,7 @@ You can view and test the live interactive MVP sites hosted on Firebase here:
 
 [![Launch Customer Portal](https://img.shields.io/badge/Customer%20Portal-Launch%20MVP-0076CE?style=for-the-badge&logo=dell&logoColor=white)](https://dellchatbotmvp.web.app/)
 [![Launch Agent Console](https://img.shields.io/badge/Agent%20Console-Launch%20MVP-1b2a47?style=for-the-badge&logo=salesforce&logoColor=white)](https://dellchatbotmvp-agent.web.app/)
+[![Launch User Journey Flowchart](https://img.shields.io/badge/User%20Journey%20Flowchart-Launch%20Portal-28a745?style=for-the-badge&logo=firebase&logoColor=white)](https://userjourneyflowchart.web.app/)
 
 ---
 
@@ -52,6 +53,60 @@ You can view and test the live interactive MVP sites hosted on Firebase here:
 * 🚨 **SLA Timeout Notifications**: Auto-removed missed requests with slide-in warning toasts and Red System Log stamps in Case Activity Timelines.
 * 📧 **Inline CRM & Emails**: Inline editable customer cards and mock email composers to log correspondence directly to Case history.
 * ❌ **Graceful Tab Dismissals**: Muted ended tabs with click-to-close buttons that dynamically shift focus to active sessions or trigger the centered "No Active Chat" placeholder.
+
+---
+
+## 🗺️ Out Of Warranty (OOW) User Journey (India)
+
+This section outlines the business logic, conversational flow, and routing rules for the Dell India Out of Warranty customer support experience.
+
+### 📶 Support Service Levels (L1 – L5)
+The support matrix divides queries into five handling tiers to optimize automated self-service vs. human resolution:
+
+| Level | Name | Who Handles | Scope / Covers |
+| :--- | :--- | :--- | :--- |
+| **L1** | Automated Lookup | Bot Only | Warranty status lookup, order/dispatch tracking, and redirects to Dell.com software resources. |
+| **L2** | Hardware Diagnosis | Bot-led → Agent closes | Interactive KB decision tree for top 5 hardware faults. Resolves or flags parts replacement before L4 handoff. |
+| **L3** | Information Handoff | Human Agent | Handling parts pricing, stock availability, warranty eligibility/pricing, and end-of-life (EOL) queries. |
+| **L4** | Agent Resolution | Human Agent | Verifying case history, logging justification, and generating quotes for part replacement (arrives from L2/L3). |
+| **L5** | Escalation / SME | Agent & SME | High-risk/complex cases: SLA breach risk, contract disputes, account manager issues, PO/billing discrepancies, or part shortages. |
+
+---
+
+### ⚙️ Main Decision Spine & Routing Logic
+
+1. **Entry & Greeting**: Customer initiates chat; the bot requests the **Service Tag** or **Express Service Code**.
+2. **Service Tag Validation**:
+   - **Valid**: Proceeds to background checks.
+   - **Invalid**: Triggers a **Re-entry Loop** (Max 3 attempts). Attempt 2 adds helper instructions; Attempt 3 failure redirects to voice queues / Dell.com support and ends with a survey.
+3. **Background Checks**: Silent checks run to retrieve warranty status and flag active case lookups.
+4. **Operating Hours Check**: Checks if the current local time is within **Mon–Fri 9:00 AM – 6:00 PM IST**.
+   - **Within Hours**: Main Menu is loaded with live agent handoff enabled.
+   - **Out of Hours (OOH)**: Main Menu is loaded with Option 5 modified to `[Currently unavailable] Connect to Live Agent` and customer is prompted with support hours.
+
+---
+
+### 🔀 Conversational Support Branches
+
+- **Branch A: Hardware & Performance [L2]**
+  - Prompt: Select hardware issue (Damage/spillage, display, power, battery, or thermal).
+  - Runs the bot-led rule-based decision tree. If resolved, displays the KB answer. If unresolved or parts replacement is identified, routes to **Block 8 (Agent Handoff)**.
+- **Branch B: Software, OS & Drivers [L1]**
+  - Delivers a machine-specific Product Support Page URL. Customer can choose to accept the link or click "Talk to Agent" (routes to Block 8).
+- **Branch C: Check Warranty Status [L1]**
+  - Displays the Service Tag status (Active/Expired) and expiration date pulled from the background check, then routes to the **Closing Loop**.
+- **Branch D: Order & Dispatch Status [L1]**
+  - Customer enters a 10-digit Tracking / Order ID. If found, shows transit status, ETA, and tracking link. If not found, runs a re-entry loop (Max 3 attempts) before redirecting to support.
+
+---
+
+### 🏁 Shared Handoff & Loop Closure
+
+- **Block 8 — Agent Handoff**: Connects to the live agent queue if within working hours. If an agent request is made Out of Hours (OOH), a mid-session handoff message is shown, and the session ends.
+- **Closing Loop (CL)**: Reached after successful L1/L2 resolutions. Asks the customer if they need anything else:
+  - **Yes**: Loops back to the operating hours check and loads the Main Menu.
+  - **No**: Thanks the customer, closes the session, and triggers the feedback survey.
+- **Survey Trigger**: A feedback survey auto-triggers after every session end (both bot-resolved and agent-resolved).
 
 ---
 
