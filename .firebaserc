@@ -10,6 +10,9 @@
         ],
         "agent": [
           "dellchatbotmvp-agent"
+        ],
+        "flowchart": [
+          "dellchatbotmvp-flowchart"
         ]
       }
     }

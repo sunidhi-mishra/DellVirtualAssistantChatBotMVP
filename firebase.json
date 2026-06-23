@@ -9,6 +9,7 @@
         "console.html",
         "console.css",
         "console.js",
+        "flowchart.html",
         "docs/**",
         "screenshots/**"
       ]
@@ -22,6 +23,7 @@
         "index.html",
         "style.css",
         "app.js",
+        "flowchart.html",
         "docs/**",
         "screenshots/**"
       ],
@@ -29,6 +31,28 @@
         {
           "source": "**",
           "destination": "/console.html"
+        }
+      ]
+    },
+    {
+      "target": "flowchart",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "index.html",
+        "style.css",
+        "app.js",
+        "console.html",
+        "console.css",
+        "console.js",
+        "docs/**",
+        "screenshots/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/flowchart.html"
         }
       ]
     }
